@@ -1,9 +1,11 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Platform } from 'react-native';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createSwitchNavigator } from 'react-navigation-switch-transitioner';
+import { Platform, SafeAreaView, Button, View } from 'react-native';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
 
 import OrdersScreen from '../screen/shop/OrdersScreen';
 import ProductsOverviewScreen from '../screen/shop/ProductOverViewScreen';
@@ -12,6 +14,8 @@ import Colors from '../constants/Colors';
 import CartScreen from '../screen/shop/CartScreen';
 import UserProductScreen from '../screen/user/UserProductScreen';
 import EditProductScreen from '../screen/user/EditProductScreen';
+import AuthScreen from '../screen/user/AuthScreen';
+import * as authActions from '../store/actions/auth';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -84,7 +88,30 @@ const ShopeNavigator = createDrawerNavigator({
 }, {
   contentOptions: {
     activeTintColor: Colors.primary
+  },
+  contentComponent: props => {
+    const dispatch = useDispatch();
+    return <View style={{flex: 1, paddingTop: 20 }}>
+      <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
+        <DrawerItems {...props} />
+        <Button title="Logout" color={Colors.primary} onPress={() => {
+          dispatch(authActions.logout());
+          props.navigation.navigate('Auth');
+        }} />
+      </SafeAreaView>
+    </View>
   }
 });
 
-export default createAppContainer(ShopeNavigator);
+const AuthNavigator = createStackNavigator({
+  Auth: AuthScreen
+}, {
+    defaultNavigationOptions: defaultNavOptions 
+});
+
+const MainNaigator = createSwitchNavigator({
+  Auth: AuthNavigator,
+  Shop: ShopeNavigator
+});
+
+export default createAppContainer(MainNaigator);

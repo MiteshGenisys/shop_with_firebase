@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -11,12 +12,13 @@ import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/card';
 import orderReducer from './store/reducers/orders';
 import ShopeNavigator from './navigation/ShopeNavigator';
-import { useState } from 'react';
+import authReducer from './store/reducers/auth';
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
-  orders: orderReducer
+  orders: orderReducer,
+  auth: authReducer
 });
 
 const fetchFonts =() => Font.loadAsync({

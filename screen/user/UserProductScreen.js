@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, Platform, Button, Alert } from 'react-native';
+import { FlatList, Platform, Button, Alert, View,Text, StyleSheet } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
@@ -22,6 +22,16 @@ const UserProductScreen = props => {
           {text: 'Yesh', style:'destructive',  onPress: () =>{ dispatch(productsActions.deleteProduct(id))} }
       ]);
   };
+
+  if (userProducts.length === 0) {
+    return (
+      <View style={styles.prodNotFound}>
+        <Text>
+          No Products found!!!
+        </Text>
+      </View>
+    );
+  }
 
     return (
         <FlatList   data={userProducts} 
@@ -75,5 +85,13 @@ UserProductScreen.navigationOptions = navData =>  {
         )
     };
 };
+
+const styles = StyleSheet.create({
+  prodNotFound: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
 
 export default UserProductScreen;

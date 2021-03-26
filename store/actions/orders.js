@@ -34,8 +34,9 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = (CartItems, totalAmount) => {
-    return async dispatch => {
-    const responce = await fetch('https://rm-complite-guide-default-rtdb.firebaseio.com/orders/u1.json', {
+    return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const responce = await fetch(`https://rm-complite-guide-default-rtdb.firebaseio.com/orders/u1.json?auth=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
